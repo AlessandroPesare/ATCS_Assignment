@@ -25,20 +25,20 @@ ratings_df = pd.read_csv(ratings_file_path)
 tags_df = pd.read_csv(tags_file_path)
 
 #
-print("Primi 5 elementi di links.csv:")
+print("First 5 elements of links.csv:")
 print(links_df.head())
 
-print("\nPrimi 5 elementi di movies.csv:")
+print("\nFirst 5 elements of movies.csv:")
 print(movies_df.head())
 
-print("\nPrimi 5 elementi di rating.csv:")
+print("\nFirst 5 elements of rating.csv:")
 print(ratings_df.head())
 
-print("\nPrimi 5 elementi di tags.csv:")
+print("\nFirst 5 elements of tags.csv:")
 print(tags_df.head())
 
 # Count element in each DataFrame
-print("\nNumero di elementi in links.csv:", len(links_df))
-print("Numero di elementi in movies.csv:", len(movies_df))
-print("Numero di elementi in rating.csv:", len(ratings_df))
-print("Numero di elementi in tags.csv:", len(tags_df))
+print("\nNumber of elements in links.csv:", len(links_df))
+print("Number of elements in movies.csv:", len(movies_df))
+print("Number of elements in rating.csv:", len(ratings_df))
+print("Number of elements in tags.csv:", len(tags_df))
