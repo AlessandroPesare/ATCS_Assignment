@@ -3,8 +3,6 @@ Prediction function
 '''
 import numpy as np
 import pandas as pd
-
-
 # Version 1
 # most_similar = 0 --> consider all users
 # most_similar = 1 --> consider only the most similar users

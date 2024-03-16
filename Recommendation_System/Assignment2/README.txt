@@ -54,6 +54,8 @@ NumPy 1.26.4
 Pandas 2.2.1
 tabulate 0.9.0
 
+python -m pip install -f requirements.txt
+
 These libraries are used for data manipulation, computing similarities between users
 
 Code Structure
