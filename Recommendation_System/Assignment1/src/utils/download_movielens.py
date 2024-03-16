@@ -11,11 +11,12 @@ import os
 
 
 project_folder = os.path.dirname(os.path.dirname(__file__))  # Risale di due directory dal percorso dello script
+print(project_folder)
+links_file_path = os.path.join(project_folder, '..', 'dataset', 'links.csv')
+movies_file_path = os.path.join(project_folder, '..', 'dataset', 'movies.csv')
+ratings_file_path = os.path.join(project_folder, '..', 'dataset', 'ratings.csv')
+tags_file_path = os.path.join(project_folder, '..', 'dataset', 'tags.csv')
 
-links_file_path = os.path.join(project_folder, 'dataset', 'links.csv')
-movies_file_path = os.path.join(project_folder, 'dataset', 'movies.csv')
-ratings_file_path = os.path.join(project_folder, 'dataset', 'ratings.csv')
-tags_file_path = os.path.join(project_folder, 'dataset', 'tags.csv')
 
 # Read CSV
 links_df = pd.read_csv(links_file_path)
