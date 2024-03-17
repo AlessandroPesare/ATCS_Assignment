@@ -9,6 +9,7 @@ as a veto for the rest of the group. In this case, the rating of an item for a g
 computed as the minimum score assigned to that item in all group members
 recommendations.
 '''
+import numpy as np
 
 def user_ratings(group_users,user_item_matrix):
     """

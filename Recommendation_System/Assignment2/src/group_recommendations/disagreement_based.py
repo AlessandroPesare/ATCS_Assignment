@@ -1,3 +1,5 @@
+import numpy as np
+
 def disagreement(group_users, user_item_matrix,individual_recommendations,movie_id, g='mean_squared_difference'):
     """
     Compute disagreement of a group on movie.
