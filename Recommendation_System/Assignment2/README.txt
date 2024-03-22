@@ -64,7 +64,7 @@ Code Structure
 The project is organized into the following modules:
 
 folder dataset: contains data in csv format
-collaborative_filtering.ipynb: implements a collaborative filtering approach (user-based) utilizing functions provided in the script collaborative_filtering.py
-collaborative_filtering.py: contains functions for implementing user-based collaborative filtering, a technique used in recommendation systems. These functions facilitate the computation of user similarities and the generation of recommendations based on those similarities
-similarity_metrics_evaluation.ipynb: Evaluates the performance of two different similarity metrics, Pearson similarity and ITR (Improved Triangle Similarity) similarity
-download_movielens.py: Read the dataset and display the first few rows to understand it
+folder group recommendations: implements a collaborative filtering approach (user-based) utilizing functions provided in the script collaborative_filtering.py
+folder utils: contains functions for implementing user-based collaborative filtering, a technique used in recommendation systems. These functions facilitate the computation of user similarities and the generation of recommendations based on those similarities
+Methods_Evaluation.ipynb: Evaluates the performance of three different approach for Group Recommendations(Least Misery, Average, Disagreement based)
+Group_Recommendation.ipynb: Show the top recommendations changing the approach.
