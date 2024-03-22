@@ -63,7 +63,7 @@ def predict_rating_with_abs(user_id, item_id, user_item_matrix, user_similarity,
         # Sort for value
         dict_intern = {k: v for k, v in sorted(dict_intern.items(), key=lambda item: item[1], reverse=True)}
         users = list(dict_intern.keys())
-        users = users[:50]
+        users = users[:100]
     else:
         users = dict_intern.keys()
     

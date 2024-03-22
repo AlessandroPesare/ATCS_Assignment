@@ -9,9 +9,17 @@ as a veto for the rest of the group. In this case, the rating of an item for a g
 computed as the minimum score assigned to that item in all group members
 recommendations.
 '''
+import sys
+import os
+
+utils_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils'))
+
+sys.path.append(utils_path)
+
 import numpy as np
+import pandas as pd
 import random
-from utils.satisfaction import user_satisfaction
+from satisfaction import user_satisfaction
 
 def user_ratings(group_users,user_item_matrix):
     """
@@ -118,38 +126,52 @@ def hybrid_aggregation(group_users, individual_recommendations,prev_group_recomm
     Calculate the hybrid aggregation of ratings for each movie across group members.
 
     Parameters:
-    group_users (list): List of user IDs in the group.
+    group_users (list): List of user in the group.
     individual_recommendations (dict): A dictionary mapping each user to a list of recommended movies with scores.
     user_item_matrix (DataFrame): DataFrame where user_item_matrix.loc[i][j] represents the rating of user i on item j.
-    prev_group_satisfaction (dict): Dictionary mapping each user ID to their satisfaction score in the previous iteration.
+    prev_group_satisfaction (dict): A list of tuples containing movie IDs and their corresponding hybrid scores.
 
     Returns:
     list: A list of tuples containing movie IDs and their corresponding hybrid scores, sorted by score in descending order.
     """
     recommended_movies_with_scores = []
-    users2movies_ratings = user_ratings(group_users, user_item_matrix)
+    users2movies_ratings = user_ratings(group_users,user_item_matrix)
+
     #First iteration
-    if(pd.isnull(prev_group_recommendations)):
-        alfa_j = random.random()
+    if(not prev_group_recommendations):
+        alfa_j = 0
     else:
         # Calculate user satisfactions for the previous iteration
-        prev_user_satisfactions = {user_id: user_satisfaction(user_id, individual_recommendations,prev_group_recommendations,user_item_matrix) for user_id in group_users}
-    
+        prev_user_satisfactions = {user_id: user_satisfaction(user_id, individual_recommendations,prev_group_recommendations) for user_id in group_users}
+        print(prev_user_satisfactions)
         # Calculate alfa_j
         max_satisfaction = max(prev_user_satisfactions.values())
         min_satisfaction = min(prev_user_satisfactions.values())
+
         alfa_j = max_satisfaction - min_satisfaction
-    
     # Iterate over all movies
     for movie_id in user_item_matrix.columns:
-        avg_score = average_aggregation(group_users, individual_recommendations, user_item_matrix)
-        least_misery_score = least_misery_aggregation(group_users, individual_recommendations, user_item_matrix)
-        
-        # Combine average and least misery scores using alfa_j
-        hybrid_score = (1 - alfa_j) * avg_score + alfa_j * least_misery_score
-        recommended_movies_with_scores.append((movie_id, hybrid_score))
-    
-    # Sort movies based on their hybrid scores
+        total_rating = 0
+        total_users = 0
+        min_rating = float('inf')  
+        # Calculate total rating and total users for the movie across all group members
+        for user_id in group_users:
+            recommendations = individual_recommendations[user_id]
+            movies2ratings = users2movies_ratings[user_id]
+            recommendations = recommendations + movies2ratings
+            for recommendation in recommendations:
+                if recommendation[0] == movie_id:
+                    min_rating = min(min_rating, recommendation[1])
+                    total_rating += recommendation[1]
+                    total_users += 1
+                    break
+                
+        # Calculate average rating for the movie
+        if total_users > 0 and min_rating != float('inf'):
+            average_rating = total_rating / total_users
+            hybrid_score = (1 - alfa_j) * average_rating + alfa_j * min_rating
+            recommended_movies_with_scores.append((movie_id, hybrid_score))
+    # Sort movies based on their average ratings
     sorted_movies = sorted(recommended_movies_with_scores, key=lambda x: x[1], reverse=True)
     
     return sorted_movies

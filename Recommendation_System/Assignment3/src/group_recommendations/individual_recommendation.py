@@ -1,9 +1,13 @@
-'''
-Recommendation functions
-'''
+# RECOMMENDATION FUNCTION
+import sys
+import os
+
+utils_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils'))
+sys.path.append(utils_path)
+
 import numpy as np
 import pandas as pd
-from utils.predict_ratings import predict_rating, predict_rating_with_abs
+from predict_ratings import predict_rating, predict_rating_with_abs
 
 
 def recommended_movies(user_id, user_item_matrix, user_similarity,most_similar):
