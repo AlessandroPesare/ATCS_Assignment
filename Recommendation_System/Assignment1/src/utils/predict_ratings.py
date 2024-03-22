@@ -22,7 +22,7 @@ def predict_rating(user_id, item_id, user_item_matrix,user_similarity,most_simil
         #sort values
         dict_intern = {k: v for k, v in sorted(dict_intern.items(), key=lambda item: item[1], reverse=True)}
         users = list(dict_intern.keys())
-        users = users[:500]
+        users = users[:200]
     else:
         users = dict_intern.keys()
     # Itera su tutti gli utenti
