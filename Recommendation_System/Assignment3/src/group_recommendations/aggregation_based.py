@@ -20,32 +20,7 @@ import numpy as np
 import pandas as pd
 import random
 from satisfaction import user_satisfaction
-
-def user_ratings(group_users,user_item_matrix):
-    """
-    Creates a dictionary mapping each user in the group to a list of movies they have rated, along with their corresponding ratings.
-
-    Parameters:
-    group_users (list): List of user IDs in the group.
-    user_item_matrix (DataFrame): DataFrame where user_item_matrix.loc[i][j] represents the rating of user i on item j.
-
-    Returns:
-    dict: A dictionary where keys are user IDs and values are lists of tuples (movie_id, rating),
-          representing the movies rated by each user in the group and their corresponding ratings.
-    """
-    movies2ratings = {}
-    # Iterate over each user in the group
-    for user_id in group_users:
-        # Initialize an empty list to store the rated movies and their ratings for the current user
-        movies2ratings[user_id] = []
-        # Iterate over each movie in the user_item_matrix columns
-        for movie_id in user_item_matrix.columns:
-            # Get the rating of the current user for the current movie
-            rating = user_item_matrix.loc[user_id][movie_id]
-            # If the rating is not NaN (i.e., the user has rated the movie), add it to the list
-            if not np.isnan(rating):
-                movies2ratings[user_id].append((movie_id,rating))
-    return movies2ratings
+from predict_ratings import user_ratings
 
 
 def average_aggregation(group_users, individual_recommendations, user_item_matrix):
@@ -154,6 +129,7 @@ def hybrid_aggregation(group_users, individual_recommendations,prev_group_recomm
         total_rating = 0
         total_users = 0
         min_rating = float('inf')  
+        hybrid_score = 0
         # Calculate total rating and total users for the movie across all group members
         for user_id in group_users:
             recommendations = individual_recommendations[user_id]
@@ -170,7 +146,13 @@ def hybrid_aggregation(group_users, individual_recommendations,prev_group_recomm
         if total_users > 0 and min_rating != float('inf'):
             average_rating = total_rating / total_users
             hybrid_score = (1 - alfa_j) * average_rating + alfa_j * min_rating
-            recommended_movies_with_scores.append((movie_id, hybrid_score))
+            found = False
+            for movie, _ in prev_group_recommendations:
+                if movie == movie_id:
+                    found = True
+                    break
+            if not found:
+                recommended_movies_with_scores.append((movie_id, hybrid_score))
     # Sort movies based on their average ratings
     sorted_movies = sorted(recommended_movies_with_scores, key=lambda x: x[1], reverse=True)
     

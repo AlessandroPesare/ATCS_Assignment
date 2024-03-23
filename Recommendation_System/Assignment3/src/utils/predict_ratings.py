@@ -4,6 +4,35 @@ Prediction function
 import numpy as np
 import pandas as pd
 
+
+
+def user_ratings(group_users,user_item_matrix):
+    """
+    Creates a dictionary mapping each user in the group to a list of movies they have rated, along with their corresponding ratings.
+
+    Parameters:
+    group_users (list): List of user IDs in the group.
+    user_item_matrix (DataFrame): DataFrame where user_item_matrix.loc[i][j] represents the rating of user i on item j.
+
+    Returns:
+    dict: A dictionary where keys are user IDs and values are lists of tuples (movie_id, rating),
+          representing the movies rated by each user in the group and their corresponding ratings.
+    """
+    movies2ratings = {}
+    # Iterate over each user in the group
+    for user_id in group_users:
+        # Initialize an empty list to store the rated movies and their ratings for the current user
+        movies2ratings[user_id] = []
+        # Iterate over each movie in the user_item_matrix columns
+        for movie_id in user_item_matrix.columns:
+            # Get the rating of the current user for the current movie
+            rating = user_item_matrix.loc[user_id][movie_id]
+            # If the rating is not NaN (i.e., the user has rated the movie), add it to the list
+            if not np.isnan(rating):
+                movies2ratings[user_id].append((movie_id,rating))
+    return movies2ratings
+
+
 # Version 1
 # most_similar = 0 --> consider all users
 # most_similar = 1 --> consider only the most similar users
