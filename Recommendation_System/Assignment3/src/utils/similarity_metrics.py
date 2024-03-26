@@ -35,7 +35,7 @@ def compute_user_mean_and_std(user_ratings,union_items):
 
     mean_rating = np.sum(user_ratings.dropna())/n
 
-    std_dev = np.sqrt((np.sum(user_ratings.dropna() - mean_rating))** 2 /m)
+    std_dev = np.sqrt((np.sum(user_ratings.dropna() - mean_rating)** 2) /m)
 
     return mean_rating,std_dev
 

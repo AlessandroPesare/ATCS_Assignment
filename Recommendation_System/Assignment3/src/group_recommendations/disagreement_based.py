@@ -6,7 +6,6 @@ utils_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'util
 
 sys.path.append(utils_path)
 import numpy as np
-from satisfaction import user_satisfaction
 from predict_ratings import user_ratings
 
 
@@ -35,7 +34,7 @@ def disagreement(group_users, user_item_matrix,individual_recommendations,movie_
 
     return deviation
 
-def group_recommendation_disagreement_based(group_users, user_item_matrix, individual_recommendations, g, top_n, prev_group_recommendations, increase_factor):
+def group_recommendation_disagreement_based(group_users,individual_recommendations,user_item_matrix,prev_group_recommendations,users_satisfaction,top_n,g,increase_factor):
     """
     Generate group recommendation based on disagreement measure.
 
@@ -50,23 +49,26 @@ def group_recommendation_disagreement_based(group_users, user_item_matrix, indiv
     Returns:
     list: List of tuples containing (item_index, recommendation_score) for the top N recommended items.
     """
-    # Step 0: Minimize disagreement, 1000 is an empirical
     disagreements = []
     for movie_id in user_item_matrix.columns:
-        disagreements.append((movie_id, disagreement(group_users, user_item_matrix, individual_recommendations, movie_id, g)))
-
-    top_disagreement_recommendations = sorted(disagreements, key=lambda x: x[1])[:1000]
+        deviation = disagreement(group_users, user_item_matrix, individual_recommendations, movie_id, g)
+        if deviation <= 0.3:  
+            disagreements.append((movie_id, deviation))  
+    top_disagreement_recommendations = sorted(disagreements, key=lambda x: x[1])
 
     least_satisfied_users = []
     recommended_movies_with_scores = []
     users2movies_ratings = user_ratings(group_users, user_item_matrix)
 
+
     # Step 1: Calculate average user satisfaction in the group in the previous iteration
     if prev_group_recommendations:
-        prev_user_satisfactions = {user_id: user_satisfaction(user_id, individual_recommendations,prev_group_recommendations) for user_id in group_users}
-        print(prev_user_satisfactions)
-        avg_user_satisfaction = sum(user_satisfaction(user_id, individual_recommendations, prev_group_recommendations) for user_id in group_users) / len(group_users)
-        least_satisfied_users = [user_id for user_id in group_users if user_satisfaction(user_id, individual_recommendations, prev_group_recommendations) < avg_user_satisfaction]
+        max_satisfaction = max(users_satisfaction.values())
+        min_satisfaction = min(users_satisfaction.values())
+        alfa_j = max_satisfaction - min_satisfaction
+        print(alfa_j)
+        avg_user_satisfaction = sum(users_satisfaction[user_id] for user_id in group_users) / len(group_users)
+        least_satisfied_users = [user_id for user_id in group_users if users_satisfaction[user_id] < avg_user_satisfaction]
 
     # Step 2: Generate recommendations
     for movie_id, _ in top_disagreement_recommendations:
@@ -94,6 +96,6 @@ def group_recommendation_disagreement_based(group_users, user_item_matrix, indiv
             if not found:
                 recommended_movies_with_scores.append((movie_id, mean_score))
     # Step 3: Select top recommendations
-    top_n_recommendations = sorted(recommended_movies_with_scores, key=lambda x: x[1], reverse=True)[:top_n]
+    top_n_recommendations = sorted(recommended_movies_with_scores, key=lambda x: x[1], reverse=True)
 
-    return top_n_recommendations
+    return top_n_recommendations[:top_n]

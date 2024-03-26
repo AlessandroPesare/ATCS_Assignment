@@ -19,7 +19,6 @@ sys.path.append(utils_path)
 import numpy as np
 import pandas as pd
 import random
-from satisfaction import user_satisfaction
 from predict_ratings import user_ratings
 
 
@@ -96,7 +95,7 @@ def least_misery_aggregation(group_users, individual_recommendations, user_item_
 
     return sorted_movies
 
-def hybrid_aggregation(group_users, individual_recommendations,prev_group_recommendations,user_item_matrix):
+def hybrid_aggregation(group_users, individual_recommendations,user_item_matrix,prev_group_recommendations,users_satisfaction,top_n):
     """
     Calculate the hybrid aggregation of ratings for each movie across group members.
 
@@ -116,14 +115,12 @@ def hybrid_aggregation(group_users, individual_recommendations,prev_group_recomm
     if(not prev_group_recommendations):
         alfa_j = 0
     else:
-        # Calculate user satisfactions for the previous iteration
-        prev_user_satisfactions = {user_id: user_satisfaction(user_id, individual_recommendations,prev_group_recommendations) for user_id in group_users}
-        print(prev_user_satisfactions)
         # Calculate alfa_j
-        max_satisfaction = max(prev_user_satisfactions.values())
-        min_satisfaction = min(prev_user_satisfactions.values())
-
+        max_satisfaction = max(users_satisfaction.values())
+        min_satisfaction = min(users_satisfaction.values())
         alfa_j = max_satisfaction - min_satisfaction
+        print(alfa_j)
+        
     # Iterate over all movies
     for movie_id in user_item_matrix.columns:
         total_rating = 0
@@ -154,6 +151,6 @@ def hybrid_aggregation(group_users, individual_recommendations,prev_group_recomm
             if not found:
                 recommended_movies_with_scores.append((movie_id, hybrid_score))
     # Sort movies based on their average ratings
-    sorted_movies = sorted(recommended_movies_with_scores, key=lambda x: x[1], reverse=True)
+    top_n_recommendations = sorted(recommended_movies_with_scores, key=lambda x: x[1], reverse=True)
     
-    return sorted_movies
+    return top_n_recommendations[:top_n]

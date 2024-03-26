@@ -1,6 +1,12 @@
 # USER SATISFACTION
+import sys
+import os
 
-def user_satisfaction(user_id,individual_recommendations,group_recommendations):
+utils_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'utils'))
+sys.path.append(utils_path)
+from predict_ratings import predict_rating_with_abs
+
+def user_satisfaction(user_id,individual_recommendations,group_recommendations,user_item_matrix,similarities):
     """
     Calculate the satisfaction of a single user based on group recommendations and individual recommendations.
 
@@ -14,10 +20,9 @@ def user_satisfaction(user_id,individual_recommendations,group_recommendations):
     """
     group_list_sat = 0
     # Calculate group_list_sat
-    for movie_group, _ in group_recommendations[:10]:
-        for movie_id, score in individual_recommendations[user_id]:
-            if movie_group == movie_id:
-                group_list_sat += score
+    for movie_id, _ in group_recommendations[:10]:
+            score = predict_rating_with_abs(user_id,movie_id,user_item_matrix,similarities,1)
+            group_list_sat += score
 
     # Calculate user_list_sat
     user_list_sat = sum(score for movie, score in individual_recommendations[user_id][:10])
