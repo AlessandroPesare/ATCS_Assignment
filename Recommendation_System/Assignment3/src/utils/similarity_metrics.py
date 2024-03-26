@@ -55,7 +55,7 @@ def sim_triangle(user_u_ratings, user_v_ratings, union_items):
     
     u_ratings = np.nan_to_num(u_ratings, nan=0)
     v_ratings = np.nan_to_num(v_ratings, nan=0)
-    
+    #Improvment-->sqrt(sum(x-y)^2)
     numerator = np.sqrt(np.sum((u_ratings - v_ratings) ** 2))
     
     denominator = np.sqrt(np.sum(u_ratings ** 2)) + np.sqrt(np.sum(v_ratings ** 2))
