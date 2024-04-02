@@ -52,7 +52,7 @@ def group_recommendation_disagreement_based(group_users,individual_recommendatio
     disagreements = []
     for movie_id in user_item_matrix.columns:
         deviation = disagreement(group_users, user_item_matrix, individual_recommendations, movie_id, g)
-        if deviation <= 0.3:  
+        if deviation <= 0.5:  
             disagreements.append((movie_id, deviation))  
     top_disagreement_recommendations = sorted(disagreements, key=lambda x: x[1])
 

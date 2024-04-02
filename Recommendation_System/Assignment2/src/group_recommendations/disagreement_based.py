@@ -39,9 +39,11 @@ def group_recommendation_disagreement_based(group_users, user_item_matrix, indiv
     """
     disagreements = []
     for movie_id in user_item_matrix.columns:
-        disagreements.append((movie_id,disagreement(group_users, user_item_matrix,individual_recommendations,movie_id, g)))
-
-    top_disagreement_recommendations = sorted(disagreements, key=lambda x: x[1])[:150]
+        deviation = disagreement(group_users, user_item_matrix, individual_recommendations, movie_id, g)
+        if deviation <= 0.2:  
+            disagreements.append((movie_id, deviation))  
+            
+    top_disagreement_recommendations = sorted(disagreements, key=lambda x: x[1])
 
     top_mean_scores = []
     for movie_id, _ in top_disagreement_recommendations:
