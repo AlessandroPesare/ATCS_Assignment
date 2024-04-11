@@ -43,6 +43,8 @@ The project is organized into the following modules:
 folder dataset: contains data in csv format
 src: This directory contains all the source code of the project:
     utils: This subdirectory contains utility functions that support various aspects of the project.
-    group_recommendation: This subdirectory contains implementations of strategies for group recommendation and sequential group recommendation.
-    Sequential_Group_Recommendation.ipynb: This Jupyter notebook facilitates the visualization of results obtained by invoking the two approaches for sequential group recommendation.
+    group_recommendation: This subdirectory contains implementations of strategies for group recommendation
+    and sequential group recommendation.
+    Sequential_Group_Recommendation.ipynb: This Jupyter notebook facilitates the visualization of results obtained by
+    invoking the two approaches for sequential group recommendation.
 folder results: contains results of some experiments 
