@@ -34,10 +34,6 @@ Summary of the course: Data integration is the process of combining data residin
 -Schema alignment
 -Data fusion
 
-### 5. Mining on Large Graphs
-
-Summary of the course: Graphs are one of the most natural models of data and are ubiquitous across diverse applications. There has been substantial investigation of numerous mining problems and optimization problems involving graphs, ranging from classic shortest path and spanning tree problems to mining dense substructures, cohesive subgraphs, densest subgraphs, community detection and search, to study of information propagation and countering of harmful information campaigns. In this short course, students will learn the basic notions, techniques, and challenges in the context of these problems and their applications.
-
 -Overview of Community detection and search.
 -Overview of Motifs and cohesive subgraphs.
 -Overview of Densest Subgraphs.
